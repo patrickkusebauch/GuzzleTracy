@@ -1,0 +1,44 @@
+<?php
+declare(strict_types = 1);
+
+namespace DanceEngineer\GuzzleTracy;
+
+use Tracy\Dumper;
+use Tracy\Helpers;
+
+?>
+<style class="tracy-debug">
+    #tracy-debug td.nette-DbConnectionPanel-sql {
+        background: white !important
+    }
+
+    #tracy-debug td.nette-DbConnectionPanel-source {
+        color: #BBB !important
+    }
+</style>
+
+<h1 title="<?= Helpers::escapeHtml('Web ČSTS') ?>">Queries: <?php
+    echo $count, ($totalTime ? sprintf(', time: %0.3f ms', $totalTime * 1000) : '') ?></h1>
+
+<div class="tracy-inner">
+    <div class="tracy-inner-container">
+        <table class="tracy-sortable">
+            <tr>
+                <th>Time&nbsp;ms</th>
+                <th>Request</th>
+                <th>Response</th>
+            </tr>
+            <?php
+            foreach($messages as $message):
+                [$time, $request, $response] = $message;
+                ?>
+                <tr>
+                    <td><?php if($time !== null): echo sprintf('%0.3f', $time * 1000); endif ?></td>
+                    <td class="nette-DbConnectionPanel-sql"><?php echo $request; ?></td>
+                    <td class="nette-DbConnectionPanel-source"><?php echo $response; ?></td>
+                </tr>
+            <?php endforeach ?>
+        </table>
+        <?php if(count($messages) < $count): ?><p>...and more</p><?php endif ?>
+    </div>
+</div>
